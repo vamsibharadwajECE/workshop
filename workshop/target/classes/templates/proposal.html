@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{/css/mycss.css}" rel="stylesheet"/>
+    <link th:href="@{/js/bootstrap.js}" rel="stylesheet"/>
+    <style>
+        /* Styling for the side navigation bar */
+        .sidenav {
+            width: 200px;
+            background-color: #f1f1f1;
+            position: fixed;
+            height: 100%;
+            overflow: auto;
+        }
+
+        /* Styling for the navigation links */
+        .sidenav a {
+            display: block;
+            padding: 16px;
+            text-decoration: none;
+            color: #000;
+        }
+
+        /* Styling for the active link */
+        .sidenav a.active {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Side navigation bar -->
+<div class="sidenav">
+    <a href="/client/profile">Profile</a>
+    <a href="/client/changepassword">Change Password</a>
+</div>
+
+<!-- Content section -->
+<div style="margin-left: 200px;">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Sapiens</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="/client/addproposal">Add proposal</a></li>
+                <li><a href="#">Cancelled Policies</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <h1>Hello from proposal page!</h1>
+     <table class="table table-bordered">
+        <tr>
+            <th>Id</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Actions</th> <!-- New column for actions -->
+        </tr>
+        <tr th:each="con : ${listProposal}">
+            <td th:text="${con.id}"></td>
+            <td th:text="${con.first_name}"></td>
+            <td th:text="${con.last_name}"></td>
+            <td th:text="${con.phoneno}"></td>
+            <td th:text="${con.email}"></td>
+            <td>
+                <a th:href="@{/client/delete/{id}(id=${con.id})}" class="btn btn-danger">Delete proposal</a>
+            </td>
+        </tr>
+    </table>
+    ...
+</div>
+</body>
+</html>

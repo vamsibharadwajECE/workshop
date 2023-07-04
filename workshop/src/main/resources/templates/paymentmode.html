@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-pzjw8a9n3w9jo6Nk9gOrOf9L9bD2B4v/Z+MOnuHxhB4IdX6jkkFVjMMI4G1f5JwC"
+        crossorigin="anonymous">
+    <style>
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Payment Page</h1>
+        <form th:action="@{/client/saveProposal}"th:object="${listProposal}" method="post">
+            <div class="form-group">
+                <label>Select your payment mode:</label>
+                <div class="form-check">
+                    <input type="radio" id="cash" name="paymentMode" value="cash" class="form-check-input"
+                        onchange="enableSubmitButton()">
+                    <label for="cash" class="form-check-label">Cash</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="creditCard" name="paymentMode" value="creditCard" class="form-check-input"
+                        onchange="enableSubmitButton()">
+                    <label for="creditCard" class="form-check-label">Credit Card</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="debitCard" name="paymentMode" value="debitCard" class="form-check-input"
+                        onchange="enableSubmitButton()">
+                    <label for="debitCard" class="form-check-label">Debit Card</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="netBanking" name="paymentMode" value="netBanking" class="form-check-input"
+                        onchange="enableSubmitButton()">
+                    <label for="netBanking" class="form-check-label">Net Banking</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="upi" name="paymentMode" value="upi" class="form-check-input"
+                        onchange="enableSubmitButton()">
+                    <label for="upi" class="form-check-label">UPI</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="paytm" name="paymentMode" value="paytm" class="form-check-input"
+                        onchange="enableSubmitButton()">
+                    <label for="paytm" class="form-check-label">Paytm</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox" id="termsAndConditions" name="termsAndConditions" class="form-check-input"
+                        onchange="enableSubmitButton()">
+                    <label for="termsAndConditions" class="form-check-label">I accept the terms and conditions</label>
+                </div>
+            </div>
+
+            <button type="submit" id="submitButton" class="btn btn-primary" disabled>Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function enableSubmitButton() {
+            var paymentMode = document.querySelector('input[name="paymentMode"]:checked');
+            var termsAndConditions = document.getElementById("termsAndConditions").checked;
+            var submitButton = document.getElementById("submitButton");
+
+            if (paymentMode !== null && termsAndConditions) {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+            }
+        }
+    </script>
+</body>
+
+</html>

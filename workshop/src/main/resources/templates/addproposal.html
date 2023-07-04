@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Insurance Application</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-pzjw8a9n3w9jo6Nk9gOrOf9L9bD2B4v/Z+MOnuHxhB4IdX6jkkFVjMMI4G1f5JwC"
+        crossorigin="anonymous">
+    <style>
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Insurance Application</h1>
+        <form th:action="@{/client/saveProposal}" th:object="${listProposal}" method="post">
+            <div class="form-group">
+                <label for="insuranceType">Select your type of insurance:</label>
+                <select id="insuranceType" class="form-control" onchange="enableFields()">
+                    <option value="" disabled selected>Select your type of insurance</option>
+                    <option value="Term insurance">Term insurance Policy</option>
+                    <option value="Whole Life insurance">Whole Life insurance Policy</option>
+                    <option value="Money Back policy">Money Back policy</option>
+                    <option value="Endowment Policy">Endowment Policy</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" th:field="*{first_name}" id="firstName" name="firstName" class="form-control" disabled required>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text"  th:field="*{last_name}" id="lastName" name="lastName" class="form-control" disabled required>
+            </div>
+
+            <div class="form-group">
+                <label for="dob">DOB:</label>
+                <input type="date" id="dob" name="dob" class="form-control" disabled required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-Mail:</label>
+                <input type="text" th:field="*{email}" id="email" name="email" class="form-control" disabled required>
+            </div>
+
+            <div class="form-group">
+                <label for="mobileNumber">Mobile Number:</label>
+                <input type="text" th:field="*{phoneno}" id="mobileNumber" name="mobileNumber" class="form-control" disabled required>
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <div class="form-check">
+                    <input type="radio" id="male" name="gender" value="Male" class="form-check-input" disabled required>
+                    <label for="male" class="form-check-label">Male</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="female" name="gender" value="Female" class="form-check-input" disabled>
+                    <label for="female" class="form-check-label">Female</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="tobacco">Do you consume tobacco?</label>
+                <input type="checkbox" id="tobacco" name="tobacco" class="form-check-input" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="annualIncome">Annual Income:</label>
+                <input type="number" id="annualIncome" name="annualIncome" class="form-control" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="lifeCoverAmount">Life Cover Amount (up to 3 crores):</label>
+                <input type="number" id="lifeCoverAmount" name="lifeCoverAmount" class="form-control" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="lifeCoverUpToAge">Life Cover Up to Age:</label>
+                <input type="number" id="lifeCoverUpToAge" name="lifeCoverUpToAge" class="form-control" disabled
+                    min="0" max="100">
+            </div>
+            
+            <div class="form-group">
+                <label for="accidentDeathBenefit">Accident Death Benefit (coverage amount):</label>
+                <input type="number" id="accidentDeathBenefit" name="accidentDeathBenefit" class="form-control" disabled min="25000" step="50000" onchange="calculateMonthlyPremium()">
+            </div>
+            
+            <div class="form-group">
+                <label for="comprehensiveCare">Comprehensive Care (coverage amount):</label>
+                <input type="number" id="comprehensiveCare" name="comprehensiveCare" class="form-control" disabled min="200000" step="300000" onchange="calculateMonthlyPremium()">
+            </div>
+            
+            <div class="form-group">
+                <label for="paymentMode">Payment Mode:</label>
+                <div class="form-check">
+                    <input type="radio" id="monthly" name="paymentMode" value="Monthly" class="form-check-input" disabled onchange="calculateMonthlyPremium()">
+                    <label for="monthly" class="form-check-label">Monthly</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="halfYearly" name="paymentMode" value="Half-Yearly" class="form-check-input" disabled onchange="calculateMonthlyPremium()">
+                    <label for="halfYearly" class="form-check-label">Half-Yearly</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="annual" name="paymentMode" value="Annual" class="form-check-input" disabled onchange="calculateMonthlyPremium()">
+                    <label for="annual" class="form-check-label">Annual</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="monthlyPremium">Monthly Premium:</label>
+                <input type="text" id="monthlyPremium" name="monthlyPremium" class="form-control" disabled>
+            </div>
+            
+            <div class="form-group">
+                <label for="cashPaymentMethod">Cash Payment Method:</label>
+                <div class="form-check">
+                    <input type="radio" id="cash" name="cashPaymentMethod" value="Cash" class="form-check-input" disabled>
+                    <label for="cash" class="form-check-label">Cash</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="creditCard" name="cashPaymentMethod" value="Credit Card" class="form-check-input" disabled>
+                    <label for="creditCard" class="form-check-label">Credit Card</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="debitCard" name="cashPaymentMethod" value="Debit Card" class="form-check-input" disabled>
+                    <label for="debitCard" class="form-check-label">Debit Card</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="netBanking" name="cashPaymentMethod" value="Net Banking" class="form-check-input" disabled>
+                    <label for="netBanking" class="form-check-label">Net Banking</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="upi" name="cashPaymentMethod" value="UPI" class="form-check-input" disabled>
+                    <label for="upi" class="form-check-label">UPI</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="paytm" name="cashPaymentMethod" value="Paytm" class="form-check-input" disabled>
+                    <label for="paytm" class="form-check-label">Paytm</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox" id="termsAndConditions" name="termsAndConditions" class="form-check-input" disabled>
+                    <label for="termsAndConditions" class="form-check-label">Accept the terms and conditions</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" disabled>Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function enableFields() {
+            var insuranceType = document.getElementById("insuranceType");
+            var formFields = document.querySelectorAll('input, select');
+
+            formFields.forEach(function (field) {
+                if (field.id !== "insuranceType") {
+                    field.disabled = insuranceType.value !== "Term insurance";
+                }
+            });
+
+            var submitButton = document.querySelector('button[type="submit"]');
+            submitButton.disabled = insuranceType.value !== "Term insurance";
+        }
+        
+        function calculateMonthlyPremium() {
+            var accidentDeathBenefit = parseInt(document.getElementById("accidentDeathBenefit").value);
+            var comprehensiveCare = parseInt(document.getElementById("comprehensiveCare").value);
+            var monthlyPremium = 100; // Base premium
+            
+            // Calculate premium for accident death benefit
+            var accidentDeathBenefitCoverage = Math.max(0, accidentDeathBenefit - 25000);
+            var accidentDeathBenefitPremium = Math.ceil(accidentDeathBenefitCoverage / 50000) * 10;
+            
+            // Calculate premium for comprehensive care
+            var comprehensiveCareCoverage = Math.max(0, comprehensiveCare - 200000);
+            var comprehensiveCarePremium = Math.ceil(comprehensiveCareCoverage / 300000) * 400;
+            
+            // Calculate overall monthly premium
+            monthlyPremium += accidentDeathBenefitPremium + comprehensiveCarePremium;
+            
+            // Apply payment mode reduction
+            var paymentMode = document.querySelector('input[name="paymentMode"]:checked').value;
+            if (paymentMode === "Half-Yearly") {
+                monthlyPremium *= 0.9;
+            } else if (paymentMode === "Annual") {
+                monthlyPremium *= 0.85;
+            }
+            
+            // Display the calculated monthly premium
+            document.getElementById("monthlyPremium").value = monthlyPremium.toFixed(2);
+        }
+    </script>
+</body>
+
+</html>
